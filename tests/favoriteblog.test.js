@@ -1,6 +1,6 @@
 const listHelper = require("../utils/list_helper");
 
-describe("total likes", () => {
+describe("favorite blog", () => {
   const listOfBlogs = [
     {
       _id: "5a422a851b54a676234d17f7",
@@ -55,8 +55,12 @@ describe("total likes", () => {
     },
   ];
 
-  test("when list has only one blog, equals the likes of that", () => {
-    const result = listHelper.totalLikes(listOfBlogs);
-    expect(result).toBe(36);
+  test("blog post with most likes", () => {
+    const result = listHelper.favoriteBlog(listOfBlogs);
+    expect(result).toEqual({
+      title: "Canonical string reduction",
+      author: "Edsger W. Dijkstra",
+      likes: 12,
+    });
   });
 });

@@ -1,8 +1,10 @@
-const listhelper = require("../utils/list_helper");
+const listHelper = require("../utils/list_helper");
 
-test("dummy returns one", () => {
-  const blogs = [];
+describe("return one", () => {
+  test("dummy returns one", () => {
+    const blogs = [];
 
-  const result = listhelper.dummy(blogs);
-  expect(result).toBe(1);
+    const result = listHelper.dummy(blogs);
+    expect(result).toBe(1);
+  });
 });

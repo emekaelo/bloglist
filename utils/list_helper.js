@@ -25,7 +25,7 @@ const favoriteBlog = (blogs) => {
   return favBlog;
 };
 
-// Returns the author who has the largest amount of blogs
+// Returns the author who has the highest amount of blogs
 const mostBlogs = (blogs) => {
   // Define the output format
   let mostNumOfBlogs = {
@@ -46,9 +46,29 @@ const mostBlogs = (blogs) => {
   return mostNumOfBlogs;
 };
 
+// Returns the author who has the most amount of likes
+const mostLikes = (blogs) => {
+  // Define the output format
+  let mostBlogLikes = {
+    author: "",
+    likes: 0,
+  };
+  for (const blog of blogs) {
+    // Filter out blogs of authors into an array
+    const authorBlogs = blogs.filter((post) => post.author === blog.author);
+    let likesSum = totalLikes(authorBlogs);
+    if (mostBlogLikes.likes < likesSum) {
+      mostBlogLikes.author = blog.author;
+      mostBlogLikes.likes = likesSum;
+    }
+  }
+  return mostBlogLikes;
+};
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
   mostBlogs,
+  mostLikes,
 };

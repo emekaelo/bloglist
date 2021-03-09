@@ -17,10 +17,10 @@ mongoose
     useCreateIndex: true,
   })
   .then((result) => {
-    logger.info("Connected to bloglist database");
+    logger.info("Connected to database");
   })
   .catch((error) => {
-    logger.error("Error connecting to bloglist database:", error.message);
+    logger.error("Error connecting to database:", error.message);
   });
 
 app.use(cors());

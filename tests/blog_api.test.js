@@ -67,6 +67,15 @@ describe("api database requests", () => {
       .expect("Content-Type", /application\/json/);
     expect(response.body.likes).toBe(0);
   });
+
+  test("if the title and url properties are missing from the request data", async () => {
+    const newBlog = {
+      author: "Me",
+      likes: 6,
+    };
+
+    await api.post("/api/blogs").send(newBlog).expect(400);
+  });
 });
 
 afterAll(() => {

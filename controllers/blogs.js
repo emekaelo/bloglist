@@ -13,10 +13,14 @@ blogsRouter.get("/", async (request, response, next) => {
 
 // Create new blog item
 blogsRouter.post("/", async (request, response, next) => {
-  const blog = new Blog(request.body);
   try {
-    const savedBlog = await blog.save();
-    response.status(201).json(savedBlog);
+    if (!request.body.title || !request.body.url) {
+      response.status(400).end();
+    } else {
+      const blog = new Blog(request.body);
+      const savedBlog = await blog.save();
+      response.status(201).json(savedBlog);
+    }
   } catch (exception) {
     next(exception);
   }

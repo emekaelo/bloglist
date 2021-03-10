@@ -14,7 +14,7 @@ beforeEach(async () => {
   }
 });
 
-describe("api database requests", () => {
+describe("when there are initially some blogs saved", () => {
   test("blogs are returned as json", async () => {
     await api
       .get("/api/blogs")
@@ -23,15 +23,31 @@ describe("api database requests", () => {
   });
 
   test("all blogs are returned", async () => {
-    const response = await api.get("/api/blogs");
-    expect(response.body).toHaveLength(helper.initialBlogs.length);
+    const response = await helper.blogsInDb();
+    expect(response).toHaveLength(helper.initialBlogs.length);
   });
 
   test("unique identifier property of the blog posts is named id", async () => {
-    const response = await api.get("/api/blogs");
-    expect(response.body[0].id).toBeDefined();
+    const response = await helper.blogsInDb();
+    expect(response[0].id).toBeDefined();
   });
 
+  test("successfully updating a single blog resource", async () => {
+    const blogUpdate = {
+      title: "React patterns",
+      author: "Michael Chan",
+      url: "https://reactpatterns.com/",
+      likes: 8,
+    };
+    let response = await helper.blogsInDb();
+    await api.put(`/api/blogs/${response[0].id}`).send(blogUpdate);
+    responseAfterUpdate = await helper.blogsInDb();
+
+    expect(responseAfterUpdate[0].likes).toBe(8);
+  });
+});
+
+describe("addition of a new blog", () => {
   test("successfully creates a new blog post", async () => {
     const newBlog = {
       title: "Test Blog",
@@ -45,10 +61,10 @@ describe("api database requests", () => {
       .send(newBlog)
       .expect(201)
       .expect("Content-Type", /application\/json/);
-    const response = await api.get("/api/blogs");
-    const titles = response.body.map((blog) => blog.title);
+    const response = await helper.blogsInDb();
+    const titles = response.map((blog) => blog.title);
     // Total number of blogs is increased by one
-    expect(response.body).toHaveLength(helper.initialBlogs.length + 1);
+    expect(response).toHaveLength(helper.initialBlogs.length + 1);
     // Content of blog post is saved correctly
     expect(titles).toContain("Test Blog");
   });
@@ -75,6 +91,18 @@ describe("api database requests", () => {
     };
 
     await api.post("/api/blogs").send(newBlog).expect(400);
+  });
+});
+
+describe("deletion of a blog", () => {
+  test("successfully deletion of a single blog resource", async () => {
+    let response = await helper.blogsInDb();
+    await api.delete(`/api/blogs/${response[0].id}`).expect(204);
+    responseAfterDelete = await helper.blogsInDb();
+    const titles = responseAfterDelete.map((blog) => blog.title);
+
+    expect(titles).not.toContain(response[0].title);
+    expect(responseAfterDelete).toHaveLength(helper.initialBlogs.length - 1);
   });
 });
 

@@ -5,18 +5,27 @@ const helper = require("./test_helper");
 const api = supertest(app);
 const Blog = require("../models/blog");
 const jwt = require("jsonwebtoken");
+const User = require("../models/user");
+const bcrypt = require("bcrypt");
+
 let token;
 
 beforeEach(async () => {
   await Blog.deleteMany({});
+  await User.deleteMany({});
 
-  const user = await helper.usersInDb();
-  const userForToken = { username: user[0].username, id: user[0]._id };
-  console.log(userForToken);
+  const saltRounds = 10;
+  const password = "test";
+  passwordHash = await bcrypt.hash(password, saltRounds);
+
+  const testUser = new User({ username: "root", passwordHash });
+  const user = await testUser.save();
+  const userForToken = { username: user.username, id: user._id };
   token = jwt.sign(userForToken, process.env.SECRET);
-  for (let blog of helper.initialBlogs) {
-    let blogObject = new Blog(blog);
 
+  for (let blog of helper.initialBlogs) {
+    blog.user = user._id;
+    let blogObject = new Blog(blog);
     await blogObject.save();
   }
 });
@@ -47,7 +56,10 @@ describe("when there are initially some blogs saved", () => {
       likes: 8,
     };
     let response = await helper.blogsInDb();
-    await api.put(`/api/blogs/${response[0].id}`).send(blogUpdate);
+    await api
+      .put(`/api/blogs/${response[0].id}`)
+      .set("Authorization", `Bearer ${token}`)
+      .send(blogUpdate);
     responseAfterUpdate = await helper.blogsInDb();
 
     expect(responseAfterUpdate[0].likes).toBe(8);
@@ -87,6 +99,7 @@ describe("addition of a new blog", () => {
     const response = await api
       .post("/api/blogs")
       .send(newBlog)
+      .set("Authorization", `Bearer ${token}`)
       .expect(201)
       .expect("Content-Type", /application\/json/);
     expect(response.body.likes).toBe(0);
@@ -98,7 +111,11 @@ describe("addition of a new blog", () => {
       likes: 6,
     };
 
-    await api.post("/api/blogs").send(newBlog).expect(400);
+    await api
+      .post("/api/blogs")
+      .set("Authorization", `Bearer ${token}`)
+      .send(newBlog)
+      .expect(400);
   });
 });
 

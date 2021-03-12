@@ -4,12 +4,19 @@ const app = require("../app");
 const helper = require("./test_helper");
 const api = supertest(app);
 const Blog = require("../models/blog");
+const jwt = require("jsonwebtoken");
+let token;
 
 beforeEach(async () => {
   await Blog.deleteMany({});
 
+  const user = await helper.usersInDb();
+  const userForToken = { username: user[0].username, id: user[0]._id };
+  console.log(userForToken);
+  token = jwt.sign(userForToken, process.env.SECRET);
   for (let blog of helper.initialBlogs) {
     let blogObject = new Blog(blog);
+
     await blogObject.save();
   }
 });
@@ -59,6 +66,7 @@ describe("addition of a new blog", () => {
     await api
       .post("/api/blogs")
       .send(newBlog)
+      .set("Authorization", `Bearer ${token}`)
       .expect(201)
       .expect("Content-Type", /application\/json/);
     const response = await helper.blogsInDb();
@@ -97,8 +105,14 @@ describe("addition of a new blog", () => {
 describe("deletion of a blog", () => {
   test("successfully deletion of a single blog resource", async () => {
     let response = await helper.blogsInDb();
-    await api.delete(`/api/blogs/${response[0].id}`).expect(204);
+
+    await api
+      .delete(`/api/blogs/${response[0].id}`)
+      .set("Authorization", `Bearer ${token}`)
+      .expect(204);
+
     responseAfterDelete = await helper.blogsInDb();
+
     const titles = responseAfterDelete.map((blog) => blog.title);
 
     expect(titles).not.toContain(response[0].title);

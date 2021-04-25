@@ -3,6 +3,17 @@ import Blog from "./components/Blog";
 import Login from "./components/Login";
 import { blogService } from "./services/blogs";
 
+const Notification = ({ message }) => {
+  if (!message) {
+    return null;
+  }
+  return (
+    <div>
+      <p>{message}</p>
+    </div>
+  );
+};
+
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState("");
@@ -11,6 +22,7 @@ const App = () => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
+  const [notification, setNotification] = useState(null);
 
   // Persist user login
   useEffect(() => {
@@ -36,26 +48,43 @@ const App = () => {
 
     blogService
       .create({ title, author, url })
-      .then((data) => console.log(data));
-    setTitle("");
-    setAuthor("");
-    setUrl("");
+      .then((data) => {
+        console.log(data);
+        handleNotification("blog post succesfully added");
+        setTitle("");
+        setAuthor("");
+        setUrl("");
+      })
+      .catch((error) => handleNotification("Error in adding blog post"));
+  };
+
+  const handleNotification = (message) => {
+    setNotification(message);
+    setTimeout(() => {
+      setNotification(null);
+    }, 4000);
   };
 
   if (user === null) {
     return (
-      <Login
-        username={username}
-        setUsername={setUsername}
-        password={password}
-        setPassword={setPassword}
-        user={user}
-        setUser={setUser}
-      />
+      <>
+        <Notification message={notification} />
+        <Login
+          username={username}
+          setUsername={setUsername}
+          password={password}
+          setPassword={setPassword}
+          user={user}
+          setUser={setUser}
+          notification={notification}
+          handleNotification={handleNotification}
+        />
+      </>
     );
   } else {
     return (
       <>
+        <Notification message={notification} />
         <h2>blogs</h2>
         <span>{user.username} is logged in.</span>
         <button onClick={handleLogout}>Logout</button>

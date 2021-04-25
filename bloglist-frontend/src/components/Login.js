@@ -8,6 +8,7 @@ const Login = ({
   setPassword,
   user,
   setUser,
+  handleNotification,
 }) => {
   const handleLogin = (event) => {
     event.preventDefault();
@@ -18,8 +19,9 @@ const Login = ({
         setUsername("");
         setPassword("");
         window.localStorage.setItem("userDetails", JSON.stringify(data));
+        handleNotification("Login successful");
       })
-      .catch((exception) => console.log(exception));
+      .catch((error) => handleNotification("Wrong username or password"));
   };
 
   return (

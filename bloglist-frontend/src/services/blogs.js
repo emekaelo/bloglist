@@ -11,5 +11,9 @@ const login = (credentials) => {
   return request.then((response) => response.data);
 };
 
-const blogService = { getAll, login };
+const logout = () => {
+  window.localStorage.removeItem("userDetails");
+};
+
+const blogService = { getAll, login, logout };
 export { blogService };

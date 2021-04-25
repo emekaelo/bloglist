@@ -17,6 +17,7 @@ const Login = ({
         setUser(data);
         setUsername("");
         setPassword("");
+        window.localStorage.setItem("userDetails", JSON.stringify(data));
       })
       .catch((exception) => console.log(exception));
   };

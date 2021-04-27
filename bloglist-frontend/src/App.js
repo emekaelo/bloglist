@@ -1,28 +1,16 @@
 import React, { useState, useEffect } from "react";
 import Blog from "./components/Blog";
-import Login from "./components/Login";
+import LoginForm from "./components/LoginForm";
+import NewBlogForm from "./components/NewBlogForm";
+import Notification from "./components/Notification";
 import { blogService } from "./services/blogs";
-
-const Notification = ({ message }) => {
-  if (!message) {
-    return null;
-  }
-  return (
-    <div>
-      <p>{message}</p>
-    </div>
-  );
-};
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
+  const [user, setUser] = useState(null);
+  const [notification, setNotification] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState(null);
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [url, setUrl] = useState("");
-  const [notification, setNotification] = useState(null);
 
   // Persist user login
   useEffect(() => {
@@ -38,24 +26,25 @@ const App = () => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
   }, []);
 
+  const handleLogin = (event) => {
+    event.preventDefault();
+    blogService
+      .login({ username, password })
+      .then((data) => {
+        setUser(data);
+        blogService.setToken(data.token);
+        setUsername("");
+        setPassword("");
+        window.localStorage.setItem("userDetails", JSON.stringify(data));
+        handleNotification("Login successful");
+      })
+      .catch((error) => handleNotification("Wrong username or password"));
+  };
+
   const handleLogout = () => {
     blogService.logout();
     setUser(null);
-  };
-
-  const handleAddBlog = (event) => {
-    event.preventDefault();
-
-    blogService
-      .create({ title, author, url })
-      .then((data) => {
-        console.log(data);
-        handleNotification("blog post succesfully added");
-        setTitle("");
-        setAuthor("");
-        setUrl("");
-      })
-      .catch((error) => handleNotification("Error in adding blog post"));
+    handleNotification("Successfully logged out");
   };
 
   const handleNotification = (message) => {
@@ -69,15 +58,12 @@ const App = () => {
     return (
       <>
         <Notification message={notification} />
-        <Login
+        <LoginForm
+          handleLogin={handleLogin}
           username={username}
           setUsername={setUsername}
           password={password}
           setPassword={setPassword}
-          user={user}
-          setUser={setUser}
-          notification={notification}
-          handleNotification={handleNotification}
         />
       </>
     );
@@ -88,31 +74,7 @@ const App = () => {
         <h2>blogs</h2>
         <span>{user.username} is logged in.</span>
         <button onClick={handleLogout}>Logout</button>
-        <h2>Add new blog post</h2>
-        <form onSubmit={handleAddBlog}>
-          <label>Title</label>
-          <input
-            value={title}
-            type="text"
-            onChange={({ target }) => setTitle(target.value)}
-          />
-          <br />
-          <label>Author</label>
-          <input
-            value={author}
-            type="text"
-            onChange={({ target }) => setAuthor(target.value)}
-          />
-          <br />
-          <label>Url</label>
-          <input
-            value={url}
-            type="text"
-            onChange={({ target }) => setUrl(target.value)}
-          />
-          <br />
-          <button type="submit">Create</button>
-        </form>
+        <NewBlogForm handleNotification={handleNotification} />
         <br />
         {blogs.map((blog) => (
           <Blog key={blog.id} blog={blog} />

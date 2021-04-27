@@ -1,29 +1,12 @@
 import React from "react";
-import { blogService } from "../services/blogs";
 
-const Login = ({
+const LoginForm = ({
   username,
   setUsername,
   password,
   setPassword,
-  user,
-  setUser,
-  handleNotification,
+  handleLogin,
 }) => {
-  const handleLogin = (event) => {
-    event.preventDefault();
-    blogService
-      .login({ username, password })
-      .then((data) => {
-        setUser(data);
-        setUsername("");
-        setPassword("");
-        window.localStorage.setItem("userDetails", JSON.stringify(data));
-        handleNotification("Login successful");
-      })
-      .catch((error) => handleNotification("Wrong username or password"));
-  };
-
   return (
     <>
       <h2>Log in to the application</h2>
@@ -48,4 +31,4 @@ const Login = ({
   );
 };
 
-export default Login;
+export default LoginForm;

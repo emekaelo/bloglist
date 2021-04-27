@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { blogService } from "../services/blogs";
 import jwt from "jsonwebtoken";
 
-const Blog = ({ user, blog, blogs, setBlogs }) => {
+const Blog = ({ user, blog, blogs, setBlogs, handleNotification }) => {
   const [visible, setVisible] = useState(false);
 
   const blogStyle = {
@@ -22,16 +22,24 @@ const Blog = ({ user, blog, blogs, setBlogs }) => {
       title: blog.title,
       url: blog.url,
     };
-    console.log(newBlog);
     blogService.update(newBlog, blog.id).then((data) => {
-      console.log(data);
       setBlogs(
         blogs.map(
-          (otherBlog) =>
-            otherBlog.id !== blog.id ? otherBlog : { ...newBlog, id: blog.id } // put request not responding with updated data so updating blogs with input data but doing after a successful response
+          (otherBlog) => (otherBlog.id !== blog.id ? otherBlog : data) // put request not responding with updated data so updating blogs with input data but doing after a successful response
         )
       );
     });
+  };
+
+  const handleDelete = () => {
+    if (
+      window.confirm(`Are you sure you want to delete ${blog.title} blog post`)
+    ) {
+      blogService.remove(blog.id).then((data) => {
+        setBlogs(blogs.filter((otherBlog) => otherBlog.id !== blog.id));
+        handleNotification("Blog post deleted successfully");
+      });
+    }
   };
 
   return (
@@ -40,7 +48,8 @@ const Blog = ({ user, blog, blogs, setBlogs }) => {
         {blog.title} {blog.author}{" "}
         <button onClick={() => setVisible(!visible)}>
           {!visible ? "show" : "hide"}
-        </button>
+        </button>{" "}
+        <button onClick={handleDelete}>Delete</button>
       </span>
       {visible && (
         <div>

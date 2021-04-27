@@ -91,7 +91,9 @@ blogsRouter.put("/:id", async (request, response, next) => {
     likes: body.likes,
   };
   try {
-    const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog);
+    const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {
+      new: true, // To return updated data
+    });
     response.json(updatedBlog);
   } catch (exception) {
     next(exception);

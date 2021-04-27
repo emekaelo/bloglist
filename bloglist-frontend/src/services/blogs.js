@@ -25,6 +25,14 @@ const update = (blog, id) => {
   return request.then((response) => response.data);
 };
 
+const remove = (id) => {
+  const config = {
+    headers: { Authorization: token },
+  };
+  const request = axios.delete(`${baseUrl}/${id}`, config);
+  return request.then((response) => response.data);
+};
+
 const login = (credentials) => {
   const request = axios.post("/api/login", credentials);
   return request.then((response) => response.data);
@@ -34,5 +42,5 @@ const logout = () => {
   window.localStorage.removeItem("userDetails");
 };
 
-const blogService = { getAll, login, logout, create, update, setToken };
+const blogService = { getAll, login, logout, create, update, remove, setToken };
 export { blogService };

@@ -46,7 +46,7 @@ const NewBlogForm = ({ handleAddBlog }) => {
 };
 
 NewBlogForm.propTypes = {
-  handleAddBlog: PropTypes.number.isRequired,
+  handleAddBlog: PropTypes.func.isRequired,
 };
 
 export default NewBlogForm;

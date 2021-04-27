@@ -10,6 +10,8 @@ const Blog = ({ user, blog, blogs, setBlogs, handleNotification }) => {
     boxShadow: "1px 1px 10px #9692926b",
     marginBottom: ".5rem",
     borderRadius: 8,
+    backgroundColor: visible ? "orange" : "white",
+    transition: "background-color 1s",
   };
 
   const handleLike = () => {
@@ -35,7 +37,7 @@ const Blog = ({ user, blog, blogs, setBlogs, handleNotification }) => {
     if (
       window.confirm(`Are you sure you want to delete ${blog.title} blog post`)
     ) {
-      blogService.remove(blog.id).then((data) => {
+      blogService.remove(blog.id).then(() => {
         setBlogs(blogs.filter((otherBlog) => otherBlog.id !== blog.id));
         handleNotification("Blog post deleted successfully");
       });

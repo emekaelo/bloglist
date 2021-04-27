@@ -38,7 +38,7 @@ const App = () => {
         setBlogs(blogs.concat(data));
         handleNotification("blog post succesfully added");
       })
-      .catch((error) => handleNotification("Error in adding blog post"));
+      .catch(() => handleNotification("Error in adding blog post"));
   };
 
   const handleLogin = (event) => {
@@ -53,7 +53,7 @@ const App = () => {
         window.localStorage.setItem("userDetails", JSON.stringify(data));
         handleNotification("Login successful");
       })
-      .catch((error) => handleNotification("Wrong username or password"));
+      .catch(() => handleNotification("Wrong username or password"));
   };
 
   const handleLogout = () => {

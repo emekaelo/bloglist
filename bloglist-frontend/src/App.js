@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Blog from "./components/Blog";
 import LoginForm from "./components/LoginForm";
 import NewBlogForm from "./components/NewBlogForm";
 import Notification from "./components/Notification";
+import Togglable from "./components/Togglable";
 import { blogService } from "./services/blogs";
 
 const App = () => {
@@ -25,6 +26,20 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
   }, []);
+
+  const blogFormRef = useRef();
+
+  const handleAddBlog = (newBlog) => {
+    blogService
+      .create(newBlog)
+      .then((data) => {
+        blogFormRef.current.toggleVisibility();
+        console.log(data);
+        setBlogs(blogs.concat(data));
+        handleNotification("blog post succesfully added");
+      })
+      .catch((error) => handleNotification("Error in adding blog post"));
+  };
 
   const handleLogin = (event) => {
     event.preventDefault();
@@ -74,7 +89,9 @@ const App = () => {
         <h2>blogs</h2>
         <span>{user.username} is logged in.</span>
         <button onClick={handleLogout}>Logout</button>
-        <NewBlogForm handleNotification={handleNotification} />
+        <Togglable ref={blogFormRef}>
+          <NewBlogForm handleAddBlog={handleAddBlog} />
+        </Togglable>
         <br />
         {blogs.map((blog) => (
           <Blog key={blog.id} blog={blog} />

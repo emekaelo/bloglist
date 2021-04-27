@@ -1,14 +1,39 @@
 import React, { useState } from "react";
+import { blogService } from "../services/blogs";
+import jwt from "jsonwebtoken";
 
-const Blog = ({ blog }) => {
+const Blog = ({ user, blog, blogs, setBlogs }) => {
   const [visible, setVisible] = useState(false);
 
   const blogStyle = {
     padding: "1rem",
-    boxShadow: "0px 1px 10px #9692926b",
-    marginBottom: 5,
+    boxShadow: "1px 1px 10px #9692926b",
+    marginBottom: ".5rem",
     borderRadius: 8,
   };
+
+  const handleLike = () => {
+    const decodedToken = jwt.decode(user.token);
+
+    const newBlog = {
+      user: decodedToken.id,
+      likes: +blog.likes + 1,
+      author: blog.author,
+      title: blog.title,
+      url: blog.url,
+    };
+    console.log(newBlog);
+    blogService.update(newBlog, blog.id).then((data) => {
+      console.log(data);
+      setBlogs(
+        blogs.map(
+          (otherBlog) =>
+            otherBlog.id !== blog.id ? otherBlog : { ...newBlog, id: blog.id } // put request not responding with updated data so updating blogs with input data but doing after a successful response
+        )
+      );
+    });
+  };
+
   return (
     <div style={blogStyle}>
       <span>
@@ -22,7 +47,7 @@ const Blog = ({ blog }) => {
           <div>{blog.url}</div>
           <div>
             {" "}
-            {blog.likes} <button>Like</button>
+            {blog.likes} <button onClick={handleLike}>Like</button>
           </div>
         </div>
       )}

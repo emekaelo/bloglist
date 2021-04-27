@@ -20,6 +20,11 @@ const create = (blog) => {
   return request.then((response) => response.data);
 };
 
+const update = (blog, id) => {
+  const request = axios.put(`${baseUrl}/${id}`, blog);
+  return request.then((response) => response.data);
+};
+
 const login = (credentials) => {
   const request = axios.post("/api/login", credentials);
   return request.then((response) => response.data);
@@ -29,5 +34,5 @@ const logout = () => {
   window.localStorage.removeItem("userDetails");
 };
 
-const blogService = { getAll, login, logout, create, setToken };
+const blogService = { getAll, login, logout, create, update, setToken };
 export { blogService };

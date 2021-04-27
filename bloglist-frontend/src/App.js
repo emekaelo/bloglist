@@ -69,6 +69,17 @@ const App = () => {
     }, 4000);
   };
 
+  const handleSortAsc = () => {
+    const tempBlogArr = [...blogs];
+    tempBlogArr.sort((a, b) => a.likes - b.likes);
+    setBlogs(tempBlogArr);
+  };
+  const handleSortDesc = () => {
+    const tempBlogArr = [...blogs];
+    tempBlogArr.sort((a, b) => b.likes - a.likes);
+    setBlogs(tempBlogArr);
+  };
+
   if (user === null) {
     return (
       <>
@@ -96,6 +107,9 @@ const App = () => {
         >
           <NewBlogForm handleAddBlog={handleAddBlog} />
         </Togglable>
+        <br />
+        <button onClick={handleSortAsc}>sort by likes low to high</button>
+        <button onClick={handleSortDesc}>sort by likes high to low</button>
         <br />
         {blogs.map((blog) => (
           <Blog

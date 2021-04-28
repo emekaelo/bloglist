@@ -69,6 +69,14 @@ const App = () => {
     }, 4000);
   };
 
+  const handleLike = (updatedBlog, blogId) => {
+    blogService.update(updatedBlog, blogId).then((data) => {
+      setBlogs(
+        blogs.map((otherBlog) => (otherBlog.id !== blogId ? otherBlog : data))
+      );
+    });
+  };
+
   const handleSortAsc = () => {
     const tempBlogArr = [...blogs];
     tempBlogArr.sort((a, b) => a.likes - b.likes);
@@ -113,6 +121,7 @@ const App = () => {
         <br />
         {blogs.map((blog) => (
           <Blog
+            updateLike={handleLike}
             user={user}
             key={blog.id}
             blog={blog}

@@ -37,3 +37,29 @@ test("renders url and likes when show button is clicked", () => {
   expect(component.container).toHaveTextContent("someurl.com");
   expect(component.container).toHaveTextContent(3);
 });
+
+test("clicking like button calls event handler twice", () => {
+  const blog = {
+    title: "Component testing is done with react-testing-library",
+    author: "Me",
+    url: "someurl.com",
+    likes: 3,
+  };
+
+  const mockHandler = jest.fn();
+  //mockHandler.mockReturnValue("blog");
+
+  const component = render(<Blog blog={blog} updateLike={mockHandler} />);
+
+  const button = component.getByTestId("visible-btn");
+  fireEvent.click(button);
+
+  const likeButton = component.getByTestId("like-btn");
+  likeButton.onclick = jest.fn((scalar) => 42 + scalar);
+  likeButton.onclick(0);
+  likeButton.onclick(1);
+  //fireEvent.click(likeButton, { target: { onclick: mockHandler() } });
+  //fireEvent.click(likeButton);
+
+  expect(likeButton.onclick.mock.calls).toHaveLength(2);
+});

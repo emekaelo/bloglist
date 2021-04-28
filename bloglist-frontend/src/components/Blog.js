@@ -2,7 +2,14 @@ import React, { useState } from "react";
 import { blogService } from "../services/blogs";
 import jwt from "jsonwebtoken";
 
-const Blog = ({ user, blog, blogs, setBlogs, handleNotification }) => {
+const Blog = ({
+  updateLike,
+  user,
+  blog,
+  blogs,
+  setBlogs,
+  handleNotification,
+}) => {
   const [visible, setVisible] = useState(false);
 
   const blogStyle = {
@@ -24,13 +31,8 @@ const Blog = ({ user, blog, blogs, setBlogs, handleNotification }) => {
       title: blog.title,
       url: blog.url,
     };
-    blogService.update(newBlog, blog.id).then((data) => {
-      setBlogs(
-        blogs.map(
-          (otherBlog) => (otherBlog.id !== blog.id ? otherBlog : data) // put request not responding with updated data so updating blogs with input data but doing after a successful response
-        )
-      );
-    });
+
+    updateLike(newBlog, blog.id);
   };
 
   const handleDelete = () => {
@@ -58,7 +60,10 @@ const Blog = ({ user, blog, blogs, setBlogs, handleNotification }) => {
           <div>{blog.url}</div>
           <div>
             {" "}
-            {blog.likes} <button onClick={handleLike}>Like</button>
+            {blog.likes}{" "}
+            <button data-testid="like-btn" onClick={handleLike}>
+              Like
+            </button>
           </div>
         </div>
       )}

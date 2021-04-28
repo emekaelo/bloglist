@@ -1,9 +1,9 @@
 import React from "react";
 import "@testing-library/jest-dom/extend-expect";
-import { render } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import Blog from "./Blog";
 
-test("renders content", () => {
+test("renders only title and author by default", () => {
   const blog = {
     title: "Component testing is done with react-testing-library",
     author: "Me",
@@ -19,4 +19,21 @@ test("renders content", () => {
   expect(component.container).toHaveTextContent("Me");
   expect(component.container).not.toHaveTextContent("someurl.com");
   expect(component.container).not.toHaveTextContent(3);
+});
+
+test("renders url and likes when show button is clicked", () => {
+  const blog = {
+    title: "Component testing is done with react-testing-library",
+    author: "Me",
+    url: "someurl.com",
+    likes: 3,
+  };
+
+  const component = render(<Blog blog={blog} />);
+
+  const button = component.getByTestId("visible-btn");
+  fireEvent.click(button);
+
+  expect(component.container).toHaveTextContent("someurl.com");
+  expect(component.container).toHaveTextContent(3);
 });

@@ -48,7 +48,7 @@ const Blog = ({ user, blog, blogs, setBlogs, handleNotification }) => {
     <div style={blogStyle}>
       <span>
         {blog.title} {blog.author}{" "}
-        <button onClick={() => setVisible(!visible)}>
+        <button data-testid="visible-btn" onClick={() => setVisible(!visible)}>
           {!visible ? "show" : "hide"}
         </button>{" "}
         <button onClick={handleDelete}>Delete</button>

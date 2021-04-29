@@ -105,7 +105,7 @@ const App = () => {
   } else {
     return (
       <>
-        <Notification message={notification} />
+        <Notification notification={notification} />
         <h2>blogs</h2>
         <span>{user.username} is logged in.</span>
         <button id="logout-button" onClick={handleLogout}>

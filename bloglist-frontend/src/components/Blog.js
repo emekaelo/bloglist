@@ -28,10 +28,18 @@ const Blog = ({ updateLike, blog, blogs, setBlogs, handleNotification }) => {
     if (
       window.confirm(`Are you sure you want to delete ${blog.title} blog post`)
     ) {
-      blogService.remove(blog.id).then(() => {
-        setBlogs(blogs.filter((otherBlog) => otherBlog.id !== blog.id));
-        handleNotification("Blog post deleted successfully");
-      });
+      blogService
+        .remove(blog.id)
+        .then(() => {
+          handleNotification("Blog post deleted successfully");
+          setBlogs(blogs.filter((otherBlog) => otherBlog.id !== blog.id));
+        })
+        .catch(() =>
+          handleNotification(
+            "Error!, can't delete a blog you didn't create",
+            "error"
+          )
+        );
     }
   };
 

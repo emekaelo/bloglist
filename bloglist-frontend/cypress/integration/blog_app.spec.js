@@ -59,7 +59,7 @@ describe("Blog app", function () {
       beforeEach(function () {
         cy.createBlog({
           title: "Another cypress test blog",
-          author: "tester",
+          author: "tester1",
           url: "http://test.com",
         });
       });
@@ -71,6 +71,38 @@ describe("Blog app", function () {
           .find(".like-button")
           .as("likeButton");
         cy.get("@likeButton").click();
+      });
+
+      describe("blog deletion", function () {
+        /* beforeEach(function () {
+          cy.register({
+            name: "test2",
+            username: "test2",
+            password: "password",
+          });
+        }); */
+
+        it("can only be done by user who created it", function () {
+          cy.contains("Another cypress test blog").contains("Delete").click();
+          cy.get("html").should("not.contain", "Another cypress test blog");
+        });
+
+        it("cannot be done by user who did not create it", function () {
+          cy.get("#logout-button").click();
+          cy.register({
+            name: "test2",
+            username: "test2",
+            password: "password",
+          });
+
+          cy.login({ username: "test2", password: "password" });
+          cy.contains("Another cypress test blog").contains("Delete").click();
+          cy.get(".error").should(
+            "contain",
+            "Error!, can't delete a blog you didn't create"
+          );
+          cy.contains("Another cypress test blog");
+        });
       });
     });
   });

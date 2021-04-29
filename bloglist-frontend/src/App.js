@@ -70,6 +70,7 @@ const App = () => {
   };
 
   const handleLike = (updatedBlog, blogId) => {
+    updatedBlog.user = user.id;
     blogService.update(updatedBlog, blogId).then((data) => {
       setBlogs(
         blogs.map((otherBlog) => (otherBlog.id !== blogId ? otherBlog : data))
@@ -113,7 +114,7 @@ const App = () => {
           buttonLabel1="new note"
           buttonLabel2="cancel"
         >
-          <NewBlogForm handleAddBlog={handleAddBlog} />
+          <NewBlogForm createBlog={handleAddBlog} />
         </Togglable>
         <br />
         <button onClick={handleSortAsc}>sort by likes low to high</button>
@@ -122,7 +123,6 @@ const App = () => {
         {blogs.map((blog) => (
           <Blog
             updateLike={handleLike}
-            user={user}
             key={blog.id}
             blog={blog}
             blogs={blogs}

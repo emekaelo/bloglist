@@ -1,15 +1,7 @@
 import React, { useState } from "react";
 import { blogService } from "../services/blogs";
-import jwt from "jsonwebtoken";
 
-const Blog = ({
-  updateLike,
-  user,
-  blog,
-  blogs,
-  setBlogs,
-  handleNotification,
-}) => {
+const Blog = ({ updateLike, blog, blogs, setBlogs, handleNotification }) => {
   const [visible, setVisible] = useState(false);
 
   const blogStyle = {
@@ -22,10 +14,7 @@ const Blog = ({
   };
 
   const handleLike = () => {
-    const decodedToken = jwt.decode(user.token);
-
     const newBlog = {
-      user: decodedToken.id,
       likes: +blog.likes + 1,
       author: blog.author,
       title: blog.title,

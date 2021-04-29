@@ -55,11 +55,11 @@ test("clicking like button calls event handler twice", () => {
   fireEvent.click(button);
 
   const likeButton = component.getByTestId("like-btn");
-  likeButton.onclick = jest.fn((scalar) => 42 + scalar);
+  /* likeButton.onclick = jest.fn((scalar) => 42 + scalar);
   likeButton.onclick(0);
-  likeButton.onclick(1);
-  //fireEvent.click(likeButton, { target: { onclick: mockHandler() } });
-  //fireEvent.click(likeButton);
+  likeButton.onclick(1); */
+  fireEvent.click(likeButton);
+  fireEvent.click(likeButton);
 
-  expect(likeButton.onclick.mock.calls).toHaveLength(2);
+  expect(mockHandler.mock.calls).toHaveLength(2);
 });

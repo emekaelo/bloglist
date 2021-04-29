@@ -1,14 +1,14 @@
 import PropTypes from "prop-types";
 import React, { useState } from "react";
 
-const NewBlogForm = ({ handleAddBlog }) => {
+const NewBlogForm = ({ createBlog }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
 
-  const addBlogHandler = (event) => {
+  const handleAddBlog = (event) => {
     event.preventDefault();
-    handleAddBlog({ title, author, url });
+    createBlog({ title, author, url });
     setTitle("");
     setAuthor("");
     setUrl("");
@@ -17,9 +17,10 @@ const NewBlogForm = ({ handleAddBlog }) => {
   return (
     <>
       <h2>Add new blog post</h2>
-      <form onSubmit={addBlogHandler}>
+      <form id="new-blog-form" onSubmit={handleAddBlog}>
         <label>Title</label>
         <input
+          id="title"
           value={title}
           type="text"
           onChange={({ target }) => setTitle(target.value)}
@@ -27,6 +28,7 @@ const NewBlogForm = ({ handleAddBlog }) => {
         <br />
         <label>Author</label>
         <input
+          id="author"
           value={author}
           type="text"
           onChange={({ target }) => setAuthor(target.value)}
@@ -34,6 +36,7 @@ const NewBlogForm = ({ handleAddBlog }) => {
         <br />
         <label>Url</label>
         <input
+          id="url"
           value={url}
           type="text"
           onChange={({ target }) => setUrl(target.value)}
@@ -46,7 +49,7 @@ const NewBlogForm = ({ handleAddBlog }) => {
 };
 
 NewBlogForm.propTypes = {
-  handleAddBlog: PropTypes.func.isRequired,
+  createBlog: PropTypes.func.isRequired,
 };
 
 export default NewBlogForm;

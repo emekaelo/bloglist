@@ -45,7 +45,7 @@ const Blog = ({ updateLike, blog, blogs, setBlogs, handleNotification }) => {
 
   return (
     <div style={blogStyle}>
-      <span>
+      <span id="blog-content">
         {blog.title} {blog.author}{" "}
         <button data-testid="visible-btn" onClick={() => setVisible(!visible)}>
           {!visible ? "show" : "hide"}

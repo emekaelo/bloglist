@@ -53,7 +53,7 @@ const App = () => {
         window.localStorage.setItem("userDetails", JSON.stringify(data));
         handleNotification("Login successful");
       })
-      .catch(() => handleNotification("Wrong username or password"));
+      .catch(() => handleNotification("Wrong username or password", "error"));
   };
 
   const handleLogout = () => {
@@ -62,8 +62,8 @@ const App = () => {
     handleNotification("Successfully logged out");
   };
 
-  const handleNotification = (message) => {
-    setNotification(message);
+  const handleNotification = (message, type = "success") => {
+    setNotification({ message, type });
     setTimeout(() => {
       setNotification(null);
     }, 4000);
@@ -92,7 +92,7 @@ const App = () => {
   if (user === null) {
     return (
       <>
-        <Notification message={notification} />
+        <Notification notification={notification} />
         <LoginForm
           handleLogin={handleLogin}
           username={username}
@@ -108,7 +108,9 @@ const App = () => {
         <Notification message={notification} />
         <h2>blogs</h2>
         <span>{user.username} is logged in.</span>
-        <button onClick={handleLogout}>Logout</button>
+        <button id="logout-button" onClick={handleLogout}>
+          Logout
+        </button>
         <Togglable
           ref={blogFormRef}
           buttonLabel1="new note"

@@ -50,7 +50,11 @@ const Blog = ({ updateLike, blog, blogs, setBlogs, handleNotification }) => {
           <div>
             {" "}
             {blog.likes}{" "}
-            <button data-testid="like-btn" onClick={handleLike}>
+            <button
+              className="like-button"
+              data-testid="like-btn"
+              onClick={handleLike}
+            >
               Like
             </button>
           </div>

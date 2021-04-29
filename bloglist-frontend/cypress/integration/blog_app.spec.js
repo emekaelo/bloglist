@@ -34,6 +34,25 @@ describe("Blog app", function () {
       cy.get(".error")
         .should("contain", "Wrong username or password")
         .and("have.css", "color", "rgb(187, 0, 0)");
+
+      cy.get("html").should("not.contain", "Login successful");
+    });
+  });
+
+  describe("When logged in", function () {
+    beforeEach(function () {
+      cy.login({ username: "test", password: "password" });
+    });
+
+    it("A blog can be created", function () {
+      cy.contains("new note").click();
+
+      cy.get("#title").type("Cypress test blog");
+      cy.get("#author").type("tester");
+      cy.get("#url").type("test.com");
+      cy.get("#create-blog").click();
+
+      cy.contains("Cypress test blog");
     });
   });
 });

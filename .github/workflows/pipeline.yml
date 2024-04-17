@@ -31,13 +31,18 @@ jobs:
         run: npm run eslint
       - name: Build
         run: npm run build
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.7.0
+        with:
+          mongodb-username: username
+          mongodb-password: password
+          mongodb-db: db
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Run Playwright tests
-        run: |
-          npm run test:e2e
-          npm run start-prod
-      - uses: actions/upload-artifact@v4
+        run: npm run test:e2e
+        env:
+          MONGO_URI: mongodb://username:password@localhost:27017/dbses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
           name: playwright-report

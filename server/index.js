@@ -5,7 +5,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 const Person = require("./models/person");
 
-app.use('/', express.static(__dirname + "build"));
+app.use(express.static(__dirname + "build"));
 app.use(express.json());
 
 // Middleware

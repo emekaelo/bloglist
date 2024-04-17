@@ -1,40 +1,40 @@
-import React, { useEffect, useState } from "react";
-import apiService from "../services/api-service";
-import Notification from "./Notification";
-import Search from "./Search";
-import Form from "./Form";
-import List from "./List";
+import React, { useEffect, useState } from 'react'
+import apiService from '../services/api-service'
+import Notification from './Notification'
+import Search from './Search'
+import Form from './Form'
+import List from './List'
 
 const App = () => {
-  const [persons, setPersons] = useState([]);
+  const [persons, setPersons] = useState([])
 
-  const [searchList, setSearchList] = useState(persons);
-  const [newName, setNewName] = useState("");
-  const [newNumber, setNewNumber] = useState("");
-  const [searchName, setSearchName] = useState("");
-  const [notify, setNotify] = useState(null);
+  const [searchList, setSearchList] = useState(persons)
+  const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
+  const [searchName, setSearchName] = useState('')
+  const [notify, setNotify] = useState(null)
 
   useEffect(() => {
     apiService.getAll().then((response) => {
-      setPersons(response);
-      setSearchList(response);
-    });
-  }, []);
+      setPersons(response)
+      setSearchList(response)
+    })
+  }, [])
 
-  const notifyUserWith = (message, type = "success-notification") => {
-    setNotify({ message, type });
+  const notifyUserWith = (message, type = 'success-notification') => {
+    setNotify({ message, type })
     setTimeout(() => {
-      setNotify(null);
-    }, 5000);
-  };
+      setNotify(null)
+    }, 5000)
+  }
 
   const addName = (event) => {
-    event.preventDefault();
-    const payload = { name: newName, number: newNumber };
+    event.preventDefault()
+    const payload = { name: newName, number: newNumber }
 
     if (persons.some((person) => person.name === newName)) {
       //alert(`${newName} is already in phonebook`);
-      const entry = persons.find(({ name }) => name === newName);
+      const entry = persons.find(({ name }) => name === newName)
 
       if (
         window.confirm(
@@ -48,11 +48,11 @@ const App = () => {
               persons.map((person) =>
                 person.id !== entry.id ? person : response.data
               )
-            );
+            )
             notifyUserWith(
               `${newName} successfully updated`,
-              "success-notification"
-            );
+              'success-notification'
+            )
           })
           .catch((error) => {
             /*  alert(
@@ -60,44 +60,44 @@ const App = () => {
             ); */
             notifyUserWith(
               `${error.response.data.error}`,
-              "error-notification"
-            );
+              'error-notification'
+            )
             //setPersons(persons.filter((person) => person.id !== entry.id));
-          });
+          })
       }
     } else {
       apiService
         .create(payload)
         .then((response) => {
-          setPersons(persons.concat(response));
+          setPersons(persons.concat(response))
           notifyUserWith(
             `${newName} successfully added`,
-            "success-notification"
-          );
+            'success-notification'
+          )
         })
         .catch((error) => {
-          notifyUserWith(`${error.response.data.error}`, "error-notification");
-        });
+          notifyUserWith(`${error.response.data.error}`, 'error-notification')
+        })
     }
-    setNewName("");
-    setNewNumber("");
-  };
+    setNewName('')
+    setNewNumber('')
+  }
 
   const handleNameChange = (event) => {
-    setNewName(event.target.value);
-  };
+    setNewName(event.target.value)
+  }
 
   const handleNumberChange = (event) => {
-    setNewNumber(event.target.value);
-  };
+    setNewNumber(event.target.value)
+  }
 
   const handleSearchNameChange = (event) => {
-    setSearchName(event.target.value);
+    setSearchName(event.target.value)
     const result = searchList.filter((person) =>
       person.name.toLowerCase().includes(event.target.value.toLowerCase())
-    );
-    setPersons(result);
-  };
+    )
+    setPersons(result)
+  }
 
   return (
     <div>
@@ -121,7 +121,7 @@ const App = () => {
         notifyUserWith={notifyUserWith}
       />
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App

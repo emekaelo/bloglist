@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 const Form = (props) => {
   const {
@@ -7,7 +7,7 @@ const Form = (props) => {
     handleNameChange,
     handleNumberChange,
     addName,
-  } = props;
+  } = props
   return (
     <form>
       <div>
@@ -21,7 +21,7 @@ const Form = (props) => {
         </button>
       </div>
     </form>
-  );
-};
+  )
+}
 
-export default Form;
+export default Form

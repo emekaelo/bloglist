@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 const Search = ({ searchName, handleSearchNameChange }) => {
   return (
@@ -6,7 +6,7 @@ const Search = ({ searchName, handleSearchNameChange }) => {
       Search:
       <input value={searchName} onChange={handleSearchNameChange} placeholder="name" />
     </div>
-  );
-};
+  )
+}
 
-export default Search;
+export default Search

@@ -7,7 +7,7 @@ const Person = require("./models/person");
 const path = require('path');
 
 
-app.use(express.static("build"));
+app.use(express.static(path.join(__dirname, 'build')));
 app.use(express.json());
 
 // Middleware
@@ -56,7 +56,7 @@ let persons = [
 
 // Get home page
 app.get("/", (request, response) => {
-  response.sendFile('build/index.html' , { root : __dirname});
+  response.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
 // Get all items

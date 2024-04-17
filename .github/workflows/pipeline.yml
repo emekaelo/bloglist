@@ -42,7 +42,7 @@ jobs:
       - name: Run Playwright tests
         run: npm run test:e2e
         env:
-          MONGO_URI: mongodb://username:password@localhost:27017/dbses: actions/upload-artifact@v4
+          MONGODB_URI: mongodb://username:password@localhost:27017/dbses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
           name: playwright-report

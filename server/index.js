@@ -56,7 +56,8 @@ let persons = [
 
 // Get home page
 app.get("/", (request, response) => {
-  response.sendFile(path.join(__dirname, 'build', 'index.html'));
+  console.log(__dirname);
+  response.sendFile(path.join(__dirname, './client/build', 'index.html'));
 });
 
 // Get all items

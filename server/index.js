@@ -53,9 +53,9 @@ let persons = [
 ];
 
 // Get home page
-app.get("/", (request, response) => {
-  response.send("<h1>devs</h1>");
-});
+// app.get("/", (request, response) => {
+//   response.send("<h1>devs</h1>");
+// });
 
 // Get all items
 app.get("/api/persons", (request, response) => {

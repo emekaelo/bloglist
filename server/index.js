@@ -7,7 +7,7 @@ const Person = require("./models/person");
 const path = require('path');
 
 
-app.use('/', express.static(path.join(__dirname + "build")));
+app.use(express.static("build"));
 app.use(express.json());
 
 // Middleware

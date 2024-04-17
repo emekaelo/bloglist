@@ -6,8 +6,9 @@ const cors = require("cors");
 const Person = require("./models/person");
 const path = require('path');
 
-
-app.use(express.static(path.join(__dirname, 'build')));
+// Serve the build files from a sibling folder
+const buildDir = path.join(__dirname, '..', 'client', 'build');
+app.use(express.static(buildDir));
 app.use(express.json());
 
 // Middleware
@@ -56,8 +57,7 @@ let persons = [
 
 // Get home page
 app.get("/", (request, response) => {
-  console.log(__dirname);
-  response.sendFile(path.join(__dirname, './client/build', 'index.html'));
+  response.sendFile(path.join(buildDir, 'index.html'));
 });
 
 // Get all items

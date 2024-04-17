@@ -25,7 +25,8 @@
     "express": "^4.17.1",
     "mongoose": "^5.11.18",
     "mongoose-unique-validator": "^2.0.3",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "webpack": "^5.91.0"
   },
   "devDependencies": {
     "eslint": "^7.21.0",

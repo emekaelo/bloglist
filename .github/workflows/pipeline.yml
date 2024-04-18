@@ -1,8 +1,8 @@
 name: Deployment pipeline
 
-defaults:
-  run:
-    working-directory: client
+# defaults:
+#   run:
+#     working-directory: client
 
 
 on:

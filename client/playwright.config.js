@@ -74,7 +74,8 @@ module.exports = defineConfig({
     command: 'npm run start-prod',
     url: 'http://localhost:3001/',
     reuseExistingServer: !process.env.CI,
-    timeout: 2 * 60 * 1000
+    timeout: 2 * 60 * 1000,
+    port: 3001
   },
 })
 
